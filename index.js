@@ -90,6 +90,7 @@ function showSortedTODO(sortBy) {
                 if (has1) return -1;
                 return 1;
             })
+            todos.forEach(todo => console.log(todo["text"]));
             break;
         case "user":
             todos.sort((todo1,todo2) => {
@@ -97,6 +98,8 @@ function showSortedTODO(sortBy) {
                     if (todo2["name"] == "Anonymous Developer") return -1;
                     return todo1["name"] > todo2["name"];
                 })
+                todos.forEach(todo => console.log(todo["text"]));
+                break;
         case "date":
             todos.sort((todo1,todo2) => {
                 date1 = Date.parse(todo1["date"]);
@@ -105,7 +108,6 @@ function showSortedTODO(sortBy) {
                 if (date1 == date2) return 0;
                 return 1;
             })
-        default:
             todos.forEach(todo => console.log(todo["text"]));
             break;
     }

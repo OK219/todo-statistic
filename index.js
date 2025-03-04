@@ -12,7 +12,8 @@ function getFiles() {
 }
 
 function processCommand(command) {
-    switch (command) {
+    const args = command.split(" ");
+    switch (args[0]) {
         case 'exit':
             process.exit(0);
             break;
@@ -21,6 +22,9 @@ function processCommand(command) {
             break;
         case 'important':
             showImportantTODO();
+            break;
+        case 'user':
+            showUserTODO(args[1]);
             break;
         default:
             console.log('wrong command');
@@ -34,22 +38,39 @@ function getAllTODOs() {
         const lines = file.split('\n');
         lines.forEach(line => {
             if (line.includes('// TODO')) {
-                todos.push(line.trim());
+                todos.push(parseTODO(line.trim()));
             }
         });
     });
     return todos;
 }
 
+function parseTODO(TODO) {
+    const TODOobj = {text : TODO, name : null, date : null};
+    TODO = TODO.replace("// TODO ","");
+    const data = TODO.split(";");
+    if (data.length == 3) {
+        TODOobj["name"] = data[0];
+        TODOobj["date"] = data[1].trim();
+    }
+    return TODOobj;
+}
+
 function showTODO() {
     const todos = getAllTODOs();
-    todos.forEach(todo => console.log(todo));
+    todos.forEach(todo => console.log(todo["text"]));
 }
 
 function showImportantTODO() {
     const todos = getAllTODOs();
-    const importantTodos = todos.filter(todo => todo.includes('!'));
-    importantTodos.forEach(todo => console.log(todo));
+    const importantTodos = todos.filter(todo => todo["text"].includes('!'));
+    importantTodos.forEach(todo => console.log(todo["text"]));
+}
+
+function showUserTODO(user) {
+    const todos = getAllTODOs();
+    const userTODOS = todos.filter(todo => todo["name"] == user);
+    userTODOS.forEach(todo => console.log(todo["text"]))
 }
 
 // TODO you can do it!
